@@ -3923,5 +3923,5 @@ body {
 
 
 div#listen-header {
-	display:none;
+	display:none!important;
 }
