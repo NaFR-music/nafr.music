@@ -82,6 +82,59 @@
 				content: none;
 				display: none;
 			}
+
+			/* Listen drawer */
+			#listen-drawer {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 380px;
+				max-width: 92vw;
+				height: 100vh;
+				background: #1a1a1a;
+				z-index: 1001;
+				transform: translateX(-100%);
+				transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+				display: flex;
+				flex-direction: column;
+			}
+			#listen-header {
+				flex-shrink: 0;
+				display: flex;
+				align-items: center;
+				padding: 0.1rem 0.4rem;
+				border-bottom: 1px solid rgba(255,255,255,0.07);
+			}
+			#listen-close {
+				background: none;
+				border: none;
+				color: rgba(255,255,255,0.5);
+				font-size: 0.7rem;
+				cursor: pointer;
+				padding: 0.05rem 0.3rem;
+				line-height: 1;
+				display: flex;
+				align-items: center;
+			}
+			#listen-close:hover { color: #fff; }
+			#listen-iframe {
+				width: 100%;
+				flex: 1;
+				border: none;
+			}
+			#wrapper, #footer {
+				transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+			}
+			body.listen-open {
+				overflow-x: hidden;
+			}
+			body.listen-open #listen-drawer { transform: translateX(0); }
+			@media (min-width: 737px) {
+				body.listen-open #wrapper,
+				body.listen-open #footer {
+					transform: translateX(380px);
+				}
+			}
 		</style>
 	</head>
 	<body class="is-preload">
@@ -135,7 +188,7 @@
 									</ol>
 									<p class="total-duration">~36 min</p>
 									<ul class="actions">
-										<li><a href="#" class="button scrolly">Listen</a></li>
+										<li><a href="https://ditto.fm/blues-and-greens-with-a-touch-of-sludge" class="button listen-btn">Listen</a></li>
 									</ul>
 								</div>
 							</div>
@@ -169,7 +222,17 @@
 				</div>
 			</footer>
 
-		<!-- Scripts -->
+		<!-- Listen Drawer -->
+		<div id="listen-drawer">
+			<div id="listen-header">
+				<button id="listen-close" aria-label="Close drawer">
+					<i class="fas fa-chevron-left"></i>
+				</button>
+			</div>
+			<iframe id="listen-iframe" title="Listen — Blues &amp; Greens with a Touch of Sludge" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+		</div>
+
+	<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/jquery.scrollex.min.js"></script>
 			<script src="assets/js/jquery.scrolly.min.js"></script>
@@ -177,6 +240,32 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script>
+				(function () {
+					var DITTO_URL = 'https://ditto.fm/blues-and-greens-with-a-touch-of-sludge';
+					var iframe   = document.getElementById('listen-iframe');
+					var closeBtn = document.getElementById('listen-close');
+
+					function openDrawer() {
+						if (!iframe.getAttribute('src')) iframe.src = DITTO_URL;
+						document.body.classList.add('listen-open');
+					}
+					function closeDrawer() {
+						document.body.classList.remove('listen-open');
+					}
+
+					document.querySelectorAll('.listen-btn').forEach(function (el) {
+						el.addEventListener('click', function (e) {
+							e.preventDefault();
+							openDrawer();
+						});
+					});
+					closeBtn.addEventListener('click', closeDrawer);
+					document.addEventListener('keydown', function (e) {
+						if (e.key === 'Escape') closeDrawer();
+					});
+				})();
+			</script>
 
 	</body>
 </html>

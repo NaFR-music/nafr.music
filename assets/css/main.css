@@ -3920,3 +3920,8 @@ body {
 		margin: 0 12em 2em 0;
 	}
 }
+
+
+div#listen-header {
+	display:none;
+}
